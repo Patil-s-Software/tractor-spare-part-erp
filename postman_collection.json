@@ -1,0 +1,337 @@
+{
+  "info": {
+    "_postman_id": "tractor-erp-master-collection",
+    "name": "Tractor Spare Parts ERP - Complete API Collection",
+    "description": "Complete Postman Collection for Auth, Users, Categories, Companies, Units, Products, Inventory, Customers, and Sales APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000", "type": "string" },
+    { "key": "accessToken", "value": "", "type": "string" },
+    { "key": "refreshToken", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "System Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+      }
+    },
+    {
+      "name": "1. Auth & Users",
+      "item": [
+        {
+          "name": "Login (Super Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.data) {",
+                  "    pm.collectionVariables.set('accessToken', jsonData.data.accessToken);",
+                  "    pm.collectionVariables.set('refreshToken', jsonData.data.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@tractorerp.com\",\n  \"password\": \"Admin@12345\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "login"] }
+          }
+        },
+        {
+          "name": "Get Profile (/users/me)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/users/me", "host": ["{{baseUrl}}"], "path": ["api", "v1", "users", "me"] }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.success && jsonData.data) {",
+                  "    pm.collectionVariables.set('accessToken', jsonData.data.accessToken);",
+                  "    pm.collectionVariables.set('refreshToken', jsonData.data.refreshToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/auth/refresh", "host": ["{{baseUrl}}"], "path": ["api", "v1", "auth", "refresh"] }
+          }
+        },
+        {
+          "name": "List All Users",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/users?page=1&limit=10", "host": ["{{baseUrl}}"], "path": ["api", "v1", "users"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Categories, Companies & Units",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/categories", "host": ["{{baseUrl}}"], "path": ["api", "v1", "categories"] }
+          }
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Engine Parts\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/categories", "host": ["{{baseUrl}}"], "path": ["api", "v1", "categories"] }
+          }
+        },
+        {
+          "name": "List Companies",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/companies", "host": ["{{baseUrl}}"], "path": ["api", "v1", "companies"] }
+          }
+        },
+        {
+          "name": "Create Company",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Mahindra\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/companies", "host": ["{{baseUrl}}"], "path": ["api", "v1", "companies"] }
+          }
+        },
+        {
+          "name": "List Units",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/units", "host": ["{{baseUrl}}"], "path": ["api", "v1", "units"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Products",
+      "item": [
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Piston Ring Set 85mm\",\n  \"partNumber\": \"PR-85-MHD\",\n  \"companyId\": \"1\",\n  \"categoryId\": \"1\",\n  \"unitId\": \"1\",\n  \"description\": \"High grade piston ring for tractor engine\",\n  \"purchasePrice\": 1200.00,\n  \"sellingPrice\": 1800.00,\n  \"gstPercent\": 18,\n  \"minimumStock\": 10,\n  \"initialStock\": 50\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/products", "host": ["{{baseUrl}}"], "path": ["api", "v1", "products"] }
+          }
+        },
+        {
+          "name": "List Products",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/products?page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["api", "v1", "products"] }
+          }
+        },
+        {
+          "name": "Get Product Detail",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/products/1", "host": ["{{baseUrl}}"], "path": ["api", "v1", "products", "1"] }
+          }
+        },
+        {
+          "name": "Update Catalog (No Stock)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "body": { "mode": "raw", "raw": "{\n  \"sellingPrice\": 1850.00,\n  \"minimumStock\": 15\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/products/1", "host": ["{{baseUrl}}"], "path": ["api", "v1", "products", "1"] }
+          }
+        },
+        {
+          "name": "Toggle Product Status",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"ACTIVE\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/products/1/status", "host": ["{{baseUrl}}"], "path": ["api", "v1", "products", "1", "status"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Inventory",
+      "item": [
+        {
+          "name": "List Inventory & Low Stock Flags",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/inventory?page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["api", "v1", "inventory"] }
+          }
+        },
+        {
+          "name": "Single Product Stock",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/inventory/1", "host": ["{{baseUrl}}"], "path": ["api", "v1", "inventory", "1"] }
+          }
+        },
+        {
+          "name": "Manual Stock Adjustment (+/-)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"1\",\n  \"movementType\": \"PURCHASE_IN\",\n  \"quantity\": 20,\n  \"remarks\": \"Stock purchase invoice #8841\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/inventory/adjust", "host": ["{{baseUrl}}"], "path": ["api", "v1", "inventory", "adjust"] }
+          }
+        },
+        {
+          "name": "Stock Movement History",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/inventory/movements?productId=1", "host": ["{{baseUrl}}"], "path": ["api", "v1", "inventory", "movements"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Customers",
+      "item": [
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ramesh Tractor Workshop\",\n  \"mobile\": \"9876543210\",\n  \"email\": \"ramesh@workshop.com\",\n  \"address\": \"Station Road, Ward 4\",\n  \"gstNumber\": \"27ABCDE1234F1Z5\",\n  \"city\": \"Nashik\",\n  \"state\": \"Maharashtra\",\n  \"openingBalance\": 5000.00,\n  \"creditLimit\": 50000.00\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/customers", "host": ["{{baseUrl}}"], "path": ["api", "v1", "customers"] }
+          }
+        },
+        {
+          "name": "List Customers",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/customers?page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["api", "v1", "customers"] }
+          }
+        },
+        {
+          "name": "Get Customer Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/customers/1", "host": ["{{baseUrl}}"], "path": ["api", "v1", "customers", "1"] }
+          }
+        },
+        {
+          "name": "Customer Outstanding Balance",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/customers/1/outstanding", "host": ["{{baseUrl}}"], "path": ["api", "v1", "customers", "1", "outstanding"] }
+          }
+        },
+        {
+          "name": "Customer Ledger Entries",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/customers/1/ledger", "host": ["{{baseUrl}}"], "path": ["api", "v1", "customers", "1", "ledger"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Sales & Finalization",
+      "item": [
+        {
+          "name": "Create Draft Sale",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": \"1\",\n  \"items\": [\n    {\n      \"productId\": \"1\",\n      \"quantity\": 2,\n      \"discountAmount\": 50\n    }\n  ],\n  \"discountAmount\": 100,\n  \"paidAmount\": 1500.00\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/v1/sales/draft", "host": ["{{baseUrl}}"], "path": ["api", "v1", "sales", "draft"] }
+          }
+        },
+        {
+          "name": "List Sales",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/sales?page=1&limit=20", "host": ["{{baseUrl}}"], "path": ["api", "v1", "sales"] }
+          }
+        },
+        {
+          "name": "Get Sale Details",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": { "raw": "{{baseUrl}}/api/v1/sales/1", "host": ["{{baseUrl}}"], "path": ["api", "v1", "sales", "1"] }
+          }
+        },
+        {
+          "name": "Finalize Sale (Atomic 13-Step)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{accessToken}}" },
+              { "key": "Idempotency-Key", "value": "IDEM-SALE-1-FINAL-001" }
+            ],
+            "url": { "raw": "{{baseUrl}}/api/v1/sales/1/finalize", "host": ["{{baseUrl}}"], "path": ["api", "v1", "sales", "1", "finalize"] }
+          }
+        },
+        {
+          "name": "Cancel Finalized Sale (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "body": { "mode": "raw", "raw": "{\n  \"cancelReason\": \"Customer returned part item due to wrong model size\"\n}" },
+            "url": { "raw": "{{baseUrl}}/api/v1/sales/1/cancel", "host": ["{{baseUrl}}"], "path": ["api", "v1", "sales", "1", "cancel"] }
+          }
+        }
+      ]
+    }
+  ]
+}
