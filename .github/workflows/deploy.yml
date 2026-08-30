@@ -48,7 +48,7 @@ jobs:
     name: Deploy to Oracle Instance
     runs-on: ubuntu-latest
     needs: test-and-build
-    environment: gbg-secret-for-aws    # Required to access your Oracle/EC2 secrets
+    environment: for_tractor_erp    # Required to access your Oracle/EC2 secrets
 
     steps:
       - name: Deploy via SSH
