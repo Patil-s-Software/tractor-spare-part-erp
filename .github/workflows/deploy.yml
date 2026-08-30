@@ -54,9 +54,9 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: 137.23.35.13
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{ secrets.OC_HOST }}
+          username: ${{ secrets.OC_USER }}
+          key: ${{ secrets.OC_SSH_KEY }}
           port: 22
           script: |
             set -e
