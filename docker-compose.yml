@@ -15,7 +15,7 @@ services:
       - tractor_erp_mysql_data:/var/lib/mysql
     # Only expose to host if needed; keeps 3306 safe from colliding with other apps on the host
     ports:
-      - "${DB_HOST_PORT:-3307}:3306"
+      - "${DB_HOST_PORT:-3308}:3306"
     networks:
       - tractor_erp_network
     healthcheck:
