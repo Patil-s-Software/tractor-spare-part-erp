@@ -80,7 +80,7 @@ CREATE TABLE `users` (
 CREATE TABLE `refresh_tokens` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
     `user_id` BIGINT NOT NULL,
-    `token_hash` VARCHAR(255) NOT NULL,
+    "token_hash` VARCHAR(255) NOT NULL,
     `user_agent` TEXT NULL,
     `expires_at` DATETIME(3) NOT NULL,
     `revoked_at` DATETIME(3) NULL,
