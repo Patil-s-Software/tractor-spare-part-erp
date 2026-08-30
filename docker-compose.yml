@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # MySQL Database container dedicated to Tractor ERP
   tractor-erp-db:

@@ -66,5 +66,5 @@ EXPOSE 5003
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
   CMD wget -qO- http://localhost:${PORT:-5003}/health || exit 1
 
-# Run Prisma migrations then start the server
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]
+# Run Prisma migrations (or sync schema) then start the server
+CMD ["sh", "-c", "npx prisma migrate deploy || npx prisma db push --accept-data-loss && node dist/server.js"]
