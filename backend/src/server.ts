@@ -8,13 +8,13 @@ async function startServer() {
 
     try {
       await prisma.$connect();
-      console.log('[Database] Connected successfully to PostgreSQL');
+      console.log('[Database] Connected successfully to MySQL');
     } catch (error: any) {
       console.warn('-------------------------------------------------------------------');
-      console.warn('[Database Warning] Could not connect to PostgreSQL database server.');
+      console.warn('[Database Warning] Could not connect to MySQL database server.');
       console.warn('Details:', error.message || error);
-      console.warn('Please ensure PostgreSQL is running at localhost:5432 and run:');
-      console.warn('  npx prisma migrate dev');
+      console.warn(`Please ensure MySQL is running at ${config.dbHost}:${config.dbPort} and run:`);
+      console.warn('  npx prisma migrate dev (or npx prisma db push)');
       console.warn('  npm run seed (or ts-node src/database/seed.ts)');
       console.warn('-------------------------------------------------------------------');
     }

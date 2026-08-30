@@ -1,0 +1,14 @@
+node_modules
+dist
+.env
+.env.*
+!.env.example
+npm-debug.log*
+*.log
+.git
+.gitignore
+.github
+coverage
+*.md
+postman_collection.json
+jest.config.js
