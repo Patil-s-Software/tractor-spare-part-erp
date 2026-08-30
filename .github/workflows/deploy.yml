@@ -54,10 +54,10 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.EC2_HOST || secrets.OCI_HOST }}
-          username: ${{ secrets.EC2_USER || secrets.OCI_USER }}
-          key: ${{ secrets.EC2_SSH_KEY || secrets.OCI_SSH_KEY }}
-          port: ${{ secrets.EC2_SSH_PORT || secrets.OCI_SSH_PORT || 22 }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
           script: |
             set -e
 
